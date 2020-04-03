@@ -1,0 +1,67 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'com.test'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.flywaydb:flyway-core'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'io.projectreactor:reactor-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//For Swagger 3
+	compile group: 'org.springdoc', name: 'springdoc-openapi-core', version: '1.1.44'
+	compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.1.44'
+	compile group: 'org.springdoc', name: 'springdoc-openapi-webflux-ui', version: '1.1.44'
+
+
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'
+
+	// jjwt and jaxb-api dependency are added for jwt tokens
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
+	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+	//for sendgrid
+	compile 'com.sendgrid:sendgrid-java:4.0.1'
+	//for sparkpost
+	compile 'com.sparkpost:sparkpost-lib:0.21'
+}
+
+test {
+	useJUnitPlatform()
+}
