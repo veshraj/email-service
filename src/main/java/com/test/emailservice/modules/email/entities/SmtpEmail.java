@@ -2,9 +2,7 @@ package com.test.emailservice.modules.email.entities;
 
 import com.test.emailservice.core.entities.AbstractEntity;
 import com.test.emailservice.modules.email.presenters.SmtpEmailPresenter;
-import com.test.emailservice.modules.email.presenters.VendorEmailPresenter;
 import com.test.emailservice.modules.email.resources.SmtpEmailResource;
-import com.test.emailservice.modules.email.resources.VendorEmailResource;
 import lombok.*;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
@@ -41,9 +39,9 @@ public class SmtpEmail extends AbstractEntity<Long> {
     @Column(name = "user_id")
     private long userId;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Host.class, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Smtp.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "host_id", referencedColumnName = "id")
-    private Host host;
+    private Smtp host;
 
     public SmtpEmailResource toSmtpEmailResource() {
         SmtpEmailPresenter resource = new SmtpEmailPresenter();

@@ -5,8 +5,10 @@ import com.test.emailservice.modules.auth.entities.AuthUser;
 import com.test.emailservice.modules.auth.entities.UserToken;
 import com.test.emailservice.modules.auth.repositories.UserTokensRepository;
 import com.test.emailservice.modules.auth.resources.AuthRequest;
+import com.test.emailservice.modules.auth.threads.AuthUserThread;
 import com.test.emailservice.modules.auth.utils.JWTUtil;
 import com.test.emailservice.modules.users.repositories.UserRepository;
+import com.test.emailservice.modules.users.resources.UserResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,8 +37,13 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        com.test.emailservice.modules.users.entities.User user = repository.findByMobileNumberOrEmail(userName);
+        com.test.emailservice.modules.users.entities.User user = AuthUserThread.getContext();
+        if (user == null) {
+            user = repository.findByMobileNumberOrEmail(userName);
+        }
+
         if (user != null) {
+
             return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
         }
 
@@ -55,22 +62,21 @@ public class AuthService implements UserDetailsService {
         try {
             tokensRepository.deleteById(userToken.getId());
             return 1;
-        }
-        catch (Exception e) {
-            return  0;
+        } catch (Exception e) {
+            return 0;
         }
 
     }
 
     /**
-     * @Description this function will call while confirming the login crdentials
      * @param request
      * @return
+     * @Description this function will call while confirming the login crdentials
      */
     public AuthUser loadUserByUsernamePassword(AuthRequest request) {
         com.test.emailservice.modules.users.entities.User user = repository.findByMobileNumberOrEmail(request.getEmail());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if(Objects.nonNull(user) && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (Objects.nonNull(user) && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return new AuthUser(user);
         }
         throw new UsernameNotFoundException("Invalid user name or password");

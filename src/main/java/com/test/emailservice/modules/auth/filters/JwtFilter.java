@@ -6,7 +6,9 @@ import com.test.emailservice.core.exceptions.CustomException;
 import com.test.emailservice.modules.auth.entities.UserToken;
 import com.test.emailservice.modules.auth.repositories.UserTokensRepository;
 import com.test.emailservice.modules.auth.services.AuthService;
+import com.test.emailservice.modules.auth.threads.AuthUserThread;
 import com.test.emailservice.modules.auth.utils.JWTUtil;
+import com.test.emailservice.modules.users.entities.User;
 import com.test.emailservice.modules.users.repositories.UserRepository;
 import com.test.emailservice.modules.users.resources.UserResource;
 import com.test.emailservice.modules.users.services.UserService;
@@ -34,7 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
     UserTokensRepository userTokensRepository;
 
     @Autowired
-    UserService userService;
+    UserRepository userRepository;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -54,7 +56,12 @@ public class JwtFilter extends OncePerRequestFilter {
             if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserToken userToken = userTokensRepository.getUserTokenByToken(token);
                 if (jwtUtil.validateToken(jwt, userToken)) {
-                    UserResource user = userService.getItem(userToken.getTokenalbeId());
+                    User user = userRepository.findById(userToken.getTokenalbeId());
+                    /**
+                     * Set local thread which will be available over the application
+                     * this context must be cleared out on the lifecycle of the request
+                     */
+                    AuthUserThread.setContext(user);
                     UserDetails userDetails = this.authService.loadUserByUsername(user.getEmail());
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

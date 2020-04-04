@@ -1,7 +1,7 @@
 package com.test.emailservice.modules.email.entities;
 
 import com.test.emailservice.core.entities.AbstractEntity;
-import com.test.emailservice.modules.email.resources.HostResource;
+import com.test.emailservice.modules.email.resources.SmtpResource;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -18,7 +18,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Host extends AbstractEntity<Integer> {
+public class Smtp extends AbstractEntity<Integer> {
     @Id
     @Column(updatable = false, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -82,8 +82,8 @@ public class Host extends AbstractEntity<Integer> {
         this.port = port;
     }
 
-    public HostResource toHostResource() {
-        return HostResource.builder()
+    public SmtpResource toHostResource() {
+        return SmtpResource.builder()
                        .id(id)
                        .host(host)
                        .name(name)

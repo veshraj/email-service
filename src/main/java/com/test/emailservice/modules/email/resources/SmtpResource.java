@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class HostResource {
+public class SmtpResource {
     private int id;
     private String name;
     private String host;

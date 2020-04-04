@@ -1,21 +1,20 @@
 package com.test.emailservice.modules.email.resources;
 
 import com.test.emailservice.core.QueryBuilder.DB;
-import com.test.emailservice.modules.email.entities.Host;
+import com.test.emailservice.modules.email.entities.Smtp;
 import lombok.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import javax.validation.constraints.NotBlank;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class HostRequest {
+public class SmtpRequest {
     private int id;
     @NotBlank(message = "Name field must not be emplty")
     private String name;
@@ -57,8 +56,8 @@ public class HostRequest {
         }
     }
 
-    public Host toHost() {
-        return Host.builder()
+    public Smtp toSmtp() {
+        return Smtp.builder()
                        .id(id)
                        .name(name)
                        .host(host)

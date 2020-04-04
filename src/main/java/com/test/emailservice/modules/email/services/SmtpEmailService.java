@@ -1,17 +1,13 @@
 package com.test.emailservice.modules.email.services;
 
-import com.test.emailservice.core.resources.Pagination;
-import com.test.emailservice.modules.email.entities.Host;
+import com.test.emailservice.modules.email.entities.Smtp;
 import com.test.emailservice.modules.email.entities.SmtpEmail;
 import com.test.emailservice.modules.email.repositories.EmailRepository;
-import com.test.emailservice.modules.email.repositories.HostRepository;
+import com.test.emailservice.modules.email.repositories.SmtpRepository;
 import com.test.emailservice.modules.email.resources.EmailRequest;
 import com.test.emailservice.modules.email.resources.SmtpEmailResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -34,7 +30,7 @@ public class SmtpEmailService {
     EmailRepository repository;
 
     @Autowired
-    HostRepository hostRepository;
+    SmtpRepository smtpRepository;
 
     public List<SmtpEmail> findAll() {
         return repository.findAll();
@@ -42,8 +38,8 @@ public class SmtpEmailService {
 
 
     public SmtpEmailResource sendMail(EmailRequest request) {
-        List<Host> hosts = hostRepository.findAll();
-        Host host = hosts.get(0);
+        List<Smtp> hosts = smtpRepository.findAll();
+        Smtp host = hosts.get(0);
         int index = 1;
         while (true) {
             setHost(host);
@@ -74,7 +70,7 @@ public class SmtpEmailService {
      *
      * @param host
      */
-    public void setHost(Host host) {
+    public void setHost(Smtp host) {
         if(sender == null) {
             sender = new JavaMailSenderImpl();
         }

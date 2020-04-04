@@ -1,17 +1,11 @@
 package com.test.emailservice.modules.email.services;
 
 import com.test.emailservice.core.exceptions.CustomException;
-import com.test.emailservice.core.resources.Pagination;
-import com.test.emailservice.modules.email.entities.Host;
-import com.test.emailservice.modules.email.repositories.HostRepository;
-import com.test.emailservice.modules.email.resources.HostRequest;
-import com.test.emailservice.modules.email.resources.HostResource;
-import com.test.emailservice.modules.users.entities.User;
-import com.test.emailservice.modules.users.resources.UserResource;
-import com.test.emailservice.modules.users.resources.UserUpdateRequest;
+import com.test.emailservice.modules.email.entities.Smtp;
+import com.test.emailservice.modules.email.repositories.SmtpRepository;
+import com.test.emailservice.modules.email.resources.SmtpRequest;
+import com.test.emailservice.modules.email.resources.SmtpResource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class HostService {
+public class SmtpService {
     @Autowired
-    HostRepository repository;
+    SmtpRepository repository;
 
-    public List<Host> findAll() {
+    public List<Smtp> findAll() {
         try{
 //            Page<Host> pageList = repository.findAll(PageRequest.of(Pagination.getPageNumber(page), Pagination.getPageSize(pageSize)));
 //            System.out.println(pageList.getTotalPages());
@@ -36,21 +30,21 @@ public class HostService {
         return null;
     }
 
-    public HostResource create(HostRequest request) {
+    public SmtpResource create(SmtpRequest request) {
         System.out.println(request.toString());
-        return repository.save(request.toHost()).toHostResource();
+        return repository.save(request.toSmtp()).toHostResource();
     }
 
-    public HostResource getItem(int id) {
+    public SmtpResource getItem(int id) {
         return repository.findById(id).toHostResource();
     }
 
-    public HostResource update(HostRequest request) {
-        Host host = repository.findById(request.getId());
+    public SmtpResource update(SmtpRequest request) {
+        Smtp host = repository.findById(request.getId());
         if(host == null) {
             throw new CustomException(HttpStatus.NOT_FOUND, "Host Not found", new HashMap());
         }
-        host = request.toHost();
+        host = request.toSmtp();
         return repository.save(host).toHostResource();
     }
 
