@@ -2,7 +2,6 @@ package com.test.emailservice.modules.email.presenters;
 
 import com.test.emailservice.modules.email.entities.SmtpEmail;
 import com.test.emailservice.modules.email.resources.SmtpEmailResource;
-import com.test.emailservice.modules.email.resources.VendorEmailResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class SmtpEmailPresenter {
     }
 
     public SmtpEmailResource map(SmtpEmail smtpEmail) {
-        HostPresenter hostPresenter = new HostPresenter();
+        SmtpPresenter smtpPresenter = new SmtpPresenter();
 
         return SmtpEmailResource.builder()
                        .id(smtpEmail.getId())
@@ -26,7 +25,7 @@ public class SmtpEmailPresenter {
                        .to(smtpEmail.getTo())
                        .subject(smtpEmail.getSubject())
                        .message(smtpEmail.getMessage())
-                       .vendor(hostPresenter.map(smtpEmail.getHost()))
+                       .vendor(smtpPresenter.map(smtpEmail.getSmtp()))
                        .build();
     }
 }

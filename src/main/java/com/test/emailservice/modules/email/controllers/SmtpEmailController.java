@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/mail/smtps")
+@RequestMapping("/api/smtp/emails")
 public class SmtpEmailController {
     @Autowired
     SmtpEmailService service;

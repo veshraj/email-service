@@ -1,10 +1,12 @@
 package com.test.emailservice.modules.email.entities;
 
 import com.test.emailservice.core.entities.AbstractEntity;
+import com.test.emailservice.modules.auth.threads.AuthUserThread;
 import com.test.emailservice.modules.email.presenters.SmtpEmailPresenter;
 import com.test.emailservice.modules.email.presenters.VendorEmailPresenter;
 import com.test.emailservice.modules.email.resources.VendorEmailResource;
 import com.test.emailservice.modules.email.resources.VendorResource;
+import com.test.emailservice.modules.users.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -33,22 +35,21 @@ public class VendorEmail extends AbstractEntity<Long> {
     private String subject;
     private String message;
 
-//    @Column(name = "host_id")
-//    private int hostId;
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = Vendor.class, fetch = FetchType.EAGER)
-    @JoinColumn(name = "host_id", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "host_id", referencedColumnName = "id", nullable = false)
     private Vendor vendor;
 
-//    public int getHostId() {
-//        return hostId;
-//    }
-//
-//    public void setHostId(int hostId) {
-//        this.hostId = hostId;
-//    }
+    public User getUser() {
+        return user;
+    }
 
-
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public long getId() {
         return id;

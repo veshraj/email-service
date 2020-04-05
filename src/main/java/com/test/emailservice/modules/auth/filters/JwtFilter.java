@@ -71,9 +71,9 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
         catch (RuntimeException e) {
-            response.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
+            response.setStatus(HttpStatus.FORBIDDEN.value());
             response.setContentType("application/json");
-            response.getWriter().write(convertObjectToJson(new CustomException(HttpStatus.UNPROCESSABLE_ENTITY,"Invalid Token", null)));
+            response.getWriter().write("{\"code\": "+HttpStatus.FORBIDDEN.value()+",\"message\":\"Invalid token passed\"}");
         }
     }
 

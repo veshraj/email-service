@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import com.test.emailservice.core.resources.Pagination;
+import com.test.emailservice.modules.auth.entities.AuthUser;
+import com.test.emailservice.modules.auth.threads.AuthUserThread;
 import com.test.emailservice.modules.email.entities.Vendor;
 import com.test.emailservice.modules.email.entities.VendorEmail;
 import com.test.emailservice.modules.email.repositories.VendorEmailRepository;
@@ -42,9 +44,9 @@ public class VendorEmailService {
                                                .from(request.getFrom())
                                                .to(request.getTo())
                                                .vendor(vendor)
+                                               .user(AuthUserThread.getContext())
                                                .message(request.getMessage())
                                                .subject(request.getSubject())
-                                               .message(request.getMessage())
                                                .build()).toVendorEmailResource();
 
             }

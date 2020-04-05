@@ -1,5 +1,6 @@
 package com.test.emailservice.modules.email.services;
 
+import com.test.emailservice.modules.auth.threads.AuthUserThread;
 import com.test.emailservice.modules.email.entities.Smtp;
 import com.test.emailservice.modules.email.entities.SmtpEmail;
 import com.test.emailservice.modules.email.repositories.EmailRepository;
@@ -38,11 +39,11 @@ public class SmtpEmailService {
 
 
     public SmtpEmailResource sendMail(EmailRequest request) {
-        List<Smtp> hosts = smtpRepository.findAll();
-        Smtp host = hosts.get(0);
+        List<Smtp> smtps = smtpRepository.findAll();
+        Smtp smtp = smtps.get(0);
         int index = 1;
         while (true) {
-            setHost(host);
+            setSmtp(smtp);
             try {
                 dispatchMail(request);
                 return repository.save(SmtpEmail.builder()
@@ -50,15 +51,17 @@ public class SmtpEmailService {
                                         .to(request.getTo())
                                         .subject(request.getSubject())
                                         .message(request.getMessage())
+                                        .smtp(smtp)
+                                        .user(AuthUserThread.getContext())
                                         .build()).toSmtpEmailResource();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            if (index == hosts.size()) {
-                System.out.println(host.getHost());
+            if (index == smtps.size()) {
+                System.out.println(smtp.getHost());
                 break;
             }
-            host = hosts.get(index);
+            smtp = smtps.get(index);
             index++;
 
         }
@@ -68,16 +71,16 @@ public class SmtpEmailService {
 
     /**
      *
-     * @param host
+     * @param smtp
      */
-    public void setHost(Smtp host) {
+    public void setSmtp(Smtp smtp) {
         if(sender == null) {
             sender = new JavaMailSenderImpl();
         }
-        sender.setHost(host.getHost());
-        sender.setUsername(host.getUsername());
-        sender.setPassword(host.getPassword());
-        sender.setPort(host.getPort());
+        sender.setHost(smtp.getHost());
+        sender.setUsername(smtp.getUsername());
+        sender.setPassword(smtp.getPassword());
+        sender.setPort(smtp.getPort());
 
         Properties mailProperties = new Properties();
         mailProperties.put("mail.smtp.auth", true);
